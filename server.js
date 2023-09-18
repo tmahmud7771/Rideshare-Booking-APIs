@@ -1,9 +1,9 @@
 // server constants
 const express = require('express');
 const cors = require('cors');
-const authRoutes = require('./routes/userRoutes');
+const authRoutes = require('./routes/rideRoutes');
 const adminRoutes = require('./routes/adminRoutes');
-const userRoutes = require('./routes/userRoutes');
+const rideRoutes = require('./routes/rideRoutes');
 const mongoose = require('./database/db');
 
 require('dotenv').config();
@@ -26,7 +26,9 @@ app.get('/',(req,res) =>{
     res.send("CAARMATE API")
 })
 
+//ride routes
 
+app.use('/api',rideRoutes)
 
 
 

@@ -2,41 +2,24 @@ const mongoose = require("mongoose");
 
 // Define the schema
 const orderSchema = new mongoose.Schema({
-  order_id: {
-    type: String,
-    required: true,
-  },
   user_email: {
     type: String,
     required: true,
   },
-  route: {
-    from: {
-      type: String,
-      required: true,
-    },
-    to: {
-      type: String,
-      required: true,
-    },
-    fare: {
-      type: Number,
-      required: true,
-    },
-    show: {
-      type: Boolean,
-      required: true,
-    },
+  routeId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "Route", // Assuming you have a Route model
   },
-  time_slot: {
-    slot: {
-      type: String,
-      required: true,
-    },
-    available_seats: {
-      type: Number,
-      required: true,
-    },
+  timeSlotId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "TimeSlot", // Assuming you have a TimeSlot model or it's a part of Route model
+  },
+  pickupPointId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "PickupPoint", // Assuming you have a PickupPoint model or it's a part of Route model
   },
   seats_booked: {
     type: Number,

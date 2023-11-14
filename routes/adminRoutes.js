@@ -135,10 +135,141 @@ router.delete("/delete-coupon/:name", async (req, res) => {
   try {
     const name = req.params.name;
     const result = await Coupon.deleteMany({ name: name });
-    res.json({ message: `${result.deletedCount} routes deleted successfully` });
+    res.json({ message: `${result.deletedCount}coupon  deleted successfully` });
   } catch (error) {
-    res.status(500).json({ error: "Failed to delete routes by number" });
+    res.status(500).json({ error: "Failed to delete coupon by number" });
   }
 });
+
+router.post("/route/:routeId/add-pickup", async (req, res) => {
+  try {
+    const routeId = req.params.routeId;
+    const pickupData = req.body; // Assuming this contains the details of the new pickup location
+
+    // Find the route by ID
+    const route = await Route.findById(routeId);
+    if (!route) {
+      return res.status(404).json({ error: "Route not found" });
+    }
+
+    // Add the new pickup location
+    route.pickup_points.push(pickupData);
+
+    // Save the updated route
+    await route.save();
+
+    res.json({ message: "Pickup location added successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to add pickup location" });
+  }
+});
+
+router.post("/route/:routeId/add-timeslot", async (req, res) => {
+  try {
+    const routeId = req.params.routeId;
+    const timeSlotData = req.body; // Assuming this contains the details of the new time slot
+
+    // Find the route by ID
+    const route = await Route.findById(routeId);
+    if (!route) {
+      return res.status(404).json({ error: "Route not found" });
+    }
+
+    // Add the new time slot
+    route.time_slots.push(timeSlotData);
+
+    // Save the updated route
+    await route.save();
+
+    res.json({ message: "Time slot added successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to add time slot" });
+  }
+});
+
+router.delete("/route/:routeId/time-slot/:timeSlotId", async (req, res) => {
+  try {
+    const { routeId, timeSlotId } = req.params;
+
+    // Find the route by ID
+    const route = await Route.findById(routeId);
+    if (!route) {
+      return res.status(404).json({ error: "Route not found" });
+    }
+
+    // Remove the time slot
+    route.time_slots.id(timeSlotId).remove();
+
+    // Save the updated route
+    await route.save();
+
+    res.json({ message: "Time slot deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to delete time slot" });
+  }
+});
+
+router.delete(
+  "/route/:routeId/pickup-point/:pickupPointId",
+  async (req, res) => {
+    try {
+      const { routeId, pickupPointId } = req.params;
+
+      // Find the route by ID
+      const route = await Route.findById(routeId);
+      if (!route) {
+        return res.status(404).json({ error: "Route not found" });
+      }
+
+      // Remove the pickup point
+      route.pickup_points.id(pickupPointId).remove();
+
+      // Save the updated route
+      await route.save();
+
+      res.json({ message: "Pickup point deleted successfully" });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to delete pickup point" });
+    }
+  }
+);
+
+router.put(
+  "/route/:routeId/time-slot/:timeSlotId/set-seats",
+  async (req, res) => {
+    try {
+      const { routeId, timeSlotId } = req.params;
+      const { availableSeats } = req.body; // New number of available seats
+
+      // Validate the availableSeats input
+      if (availableSeats < 0) {
+        return res
+          .status(400)
+          .json({ error: "Invalid number of available seats" });
+      }
+
+      // Find the route by ID
+      const route = await Route.findById(routeId);
+      if (!route) {
+        return res.status(404).json({ error: "Route not found" });
+      }
+
+      // Find the specific time slot and update its available seats
+      const timeSlot = route.time_slots.id(timeSlotId);
+      if (!timeSlot) {
+        return res.status(404).json({ error: "Time slot not found" });
+      }
+
+      timeSlot.available_seats = availableSeats;
+
+      // Save the updated route
+      await route.save();
+
+      res.json({ message: "Available seats updated successfully" });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to update available seats" });
+    }
+  }
+);
 
 module.exports = router;

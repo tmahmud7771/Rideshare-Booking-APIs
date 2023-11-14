@@ -6,6 +6,10 @@ const timeSlotSchema = new mongoose.Schema({
   available_seats: Number,
 });
 
+const pickupPointSchema = new mongoose.Schema({
+  name: String, // or any other relevant fields
+});
+
 // Define the schema for routes
 const routeSchema = new mongoose.Schema({
   routesNumber: Number,
@@ -14,6 +18,7 @@ const routeSchema = new mongoose.Schema({
   fare: Number,
   show: Boolean,
   time_slots: [timeSlotSchema],
+  pickup_points: [pickupPointSchema],
 });
 
 // Define the schema for popular routes
@@ -24,6 +29,7 @@ const popularRouteSchema = new mongoose.Schema({
   fare: Number,
   show: Boolean,
   time_slots: [timeSlotSchema], // Embed the time slots schema
+  pickup_points: [pickupPointSchema],
 });
 
 const couponSchema = new mongoose.Schema({
@@ -38,5 +44,7 @@ const Coupon = mongoose.model("Coupon", couponSchema);
 // Create Mongoose models for routes and popular routes
 const Route = mongoose.model("Route", routeSchema);
 const PopularRoute = mongoose.model("PopularRoute", popularRouteSchema);
+const TimeSlot = mongoose.model("TimeSlot", timeSlotSchema);
+const PickupPoint = mongoose.model("PickupPoint", pickupPointSchema);
 
-module.exports = { Route, PopularRoute, Coupon };
+module.exports = { Route, PopularRoute, Coupon, TimeSlot, PickupPoint };

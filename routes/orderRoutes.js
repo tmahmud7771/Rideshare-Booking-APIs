@@ -131,10 +131,11 @@ router.delete("/delete-order/:id", async (req, res) => {
     await route.save();
 
     // Delete the order
-    const result = await Order.deleteOne({ _id: id });
-    res.json({ message: `${result.deletedCount} order deleted successfully` });
+    order.status = "Cancelled";
+    await order.save();
+    res.json({ message: `${order._id}} order Cancelled successfully` });
   } catch (error) {
-    res.status(500).json({ error: "Failed to delete order by id" });
+    res.status(500).json({ error: "Failed to Cancelled order by id" });
   }
 });
 

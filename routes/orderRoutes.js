@@ -90,10 +90,48 @@ router.get("/order/user/:email", async (req, res) => {
   }
 });
 
+// router.delete("/delete-order/:id", async (req, res) => {
+//   try {
+//     const id = req.params.id;
+//     const result = await Order.deleteMany({ _id: id });
+//     res.json({ message: `${result.deletedCount} order deleted successfully` });
+//   } catch (error) {
+//     res.status(500).json({ error: "Failed to delete order by id" });
+//   }
+// });
+
 router.delete("/delete-order/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const result = await Order.deleteMany({ _id: id });
+
+    // Find the order to get the number of seats booked and associated routeId and timeSlotId
+    const order = await Order.findById(id);
+    if (!order) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+
+    const { routeId, timeSlotId, seats_booked } = order;
+
+    // Find the route
+    const route = await Route.findById(routeId);
+    if (!route) {
+      return res.status(404).json({ error: "Route not found" });
+    }
+
+    // Find the specific time slot
+    const timeSlot = route.time_slots.id(timeSlotId);
+    if (!timeSlot) {
+      return res.status(404).json({ error: "Time slot not found" });
+    }
+
+    // Increment the available seats
+    timeSlot.available_seats += seats_booked;
+
+    // Save the updated route
+    await route.save();
+
+    // Delete the order
+    const result = await Order.deleteOne({ _id: id });
     res.json({ message: `${result.deletedCount} order deleted successfully` });
   } catch (error) {
     res.status(500).json({ error: "Failed to delete order by id" });

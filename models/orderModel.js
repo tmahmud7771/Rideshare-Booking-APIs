@@ -7,15 +7,47 @@ const orderSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+
     routeId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: "Route", // Assuming you have a Route model
     },
+
+    routeDetail: {
+      routeNumber: {
+        type: Number,
+        required: true,
+      },
+      from: {
+        type: String,
+        required: true,
+      },
+      to: {
+        type: String,
+        required: true,
+      },
+    },
+    timeslotDetail: {
+      slot: {
+        type: String,
+        required: true,
+      },
+      available_seats: {
+        type: Number,
+        required: true,
+      },
+    },
     timeSlotId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: "TimeSlot", // Assuming you have a TimeSlot model or it's a part of Route model
+    },
+    pickupPointDetail: {
+      name: {
+        type: String,
+        required: true,
+      },
     },
     pickupPointId: {
       type: mongoose.Schema.Types.ObjectId,

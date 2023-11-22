@@ -1,9 +1,9 @@
 // server constants
 const express = require("express");
 const cors = require("cors");
-const authRoutes = require("./routes/orderRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const orderRoutes = require("./routes/orderRoutes");
+const userRoutes = require("./routes/userRoutes");
 const mongoose = require("./database/db");
 
 require("dotenv").config();
@@ -31,6 +31,8 @@ app.use("/api", orderRoutes);
 //admin routes
 
 app.use("/api", adminRoutes);
+
+app.use("/api/user", userRoutes);
 
 //404 route setup
 app.use((req, res) => {

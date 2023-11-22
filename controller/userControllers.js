@@ -9,7 +9,7 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error("Please fill all the fields");
   }
 
-  const userExists = await User.findOne({ email });
+  const userExists = await User.findOne({ phone, email });
 
   if (userExists) {
     res.status(400);

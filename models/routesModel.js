@@ -19,6 +19,8 @@ const routeSchema = new mongoose.Schema({
   show: Boolean,
   time_slots: [timeSlotSchema],
   pickup_points: [pickupPointSchema],
+  vehicle_number: String,
+  vehicle_name: String,
 });
 
 // Define the schema for popular routes

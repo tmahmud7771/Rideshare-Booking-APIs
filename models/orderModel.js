@@ -78,7 +78,6 @@ const orderSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Create a model based on the schema
 const Order = mongoose.model("Order", orderSchema);
 
 module.exports = Order;

@@ -41,7 +41,7 @@ const orderSchema = new mongoose.Schema(
     timeSlotId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: "TimeSlot", // Assuming you have a TimeSlot model or it's a part of Route model
+      ref: "TimeSlot",
     },
     pickupPointDetail: {
       name: {
@@ -52,7 +52,7 @@ const orderSchema = new mongoose.Schema(
     pickupPointId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: "PickupPoint", // Assuming you have a PickupPoint model or it's a part of Route model
+      ref: "PickupPoint",
     },
     seats_booked: {
       type: Number,

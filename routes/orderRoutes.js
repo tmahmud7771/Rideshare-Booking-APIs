@@ -100,7 +100,7 @@ router.get("/order/user/:email", async (req, res) => {
 //   }
 // });
 
-router.delete("/delete-order/:id", async (req, res) => {
+router.delete("/cancel-order/:id", async (req, res) => {
   try {
     const id = req.params.id;
 
@@ -136,6 +136,25 @@ router.delete("/delete-order/:id", async (req, res) => {
     res.json({ message: `${order._id}} order Cancelled successfully` });
   } catch (error) {
     res.status(500).json({ error: "Failed to Cancelled order by id" });
+  }
+});
+
+router.delete("/delete-order/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    // Find the order
+    const order = await Order.findById(id);
+    if (!order) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+
+    // Delete the order
+    await Order.deleteOne({ _id: id });
+
+    res.json({ message: `${order._id} order deleted successfully` });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to delete order by id" });
   }
 });
 

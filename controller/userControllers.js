@@ -61,4 +61,23 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { registerUser, authUser };
+const getUserProfile = asyncHandler(async (req, res) => {
+  const email = req.params.email;
+  const isChecked = req.body.isChecked;
+
+  const user = await User.findOne({ email });
+  if (user && isChecked) {
+    res.status(201).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      sex: user.sex,
+      pic: user.pic,
+    });
+  } else {
+    res.status(401).json({ error: "Entered Wrong Email" });
+  }
+});
+
+module.exports = { registerUser, authUser, getUserProfile };

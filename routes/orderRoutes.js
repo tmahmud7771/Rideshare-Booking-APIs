@@ -158,4 +158,34 @@ router.delete("/delete-order/:id", async (req, res) => {
   }
 });
 
+router.post("/payment-order/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const order = await Order.findById(id);
+    if (!order) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+
+    const { routeId, timeSlotId, seats_booked } = order;
+
+    const route = await Route.findById(routeId);
+    if (!route) {
+      return res.status(404).json({ error: "Route not found" });
+    }
+
+    const timeSlot = route.time_slots.id(timeSlotId);
+    if (!timeSlot) {
+      return res.status(404).json({ error: "Time slot not found" });
+    }
+
+    // Payment the order
+    order.status = "paid";
+    await order.save();
+    res.json({ message: `${order._id}} order paid successfully` });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to pay order by id" });
+  }
+});
+
 module.exports = router;

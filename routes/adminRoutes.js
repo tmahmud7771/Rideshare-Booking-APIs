@@ -7,6 +7,17 @@ const { Route, PopularRoute, Coupon } = require("../models/routesModel");
 router.post("/create-route", async (req, res) => {
   try {
     const routeData = req.body;
+
+    const latestRoute = await Route.findOne(
+      {},
+      {},
+      { sort: { routesNumber: -1 } }
+    );
+
+    const nextRoutesNumber = latestRoute ? latestRoute.routesNumber + 1 : 1;
+
+    routeData.routesNumber = nextRoutesNumber;
+
     const newRoute = new Route(routeData);
     await newRoute.save();
     res.json({ message: "Route created successfully" });

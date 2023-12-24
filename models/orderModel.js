@@ -8,6 +8,13 @@ const orderSchema = new mongoose.Schema(
       required: true,
     },
 
+    username: {
+      type: String,
+    },
+    user_phone: {
+      type: String,
+    },
+
     routeId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,

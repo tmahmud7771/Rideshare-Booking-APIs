@@ -21,6 +21,7 @@ router.get("/allOrder", async (req, res) => {
 router.post("/order/create", async (req, res) => {
   try {
     const order_data = req.body;
+    console.log(order_data);
 
     // Assuming order_data contains routeId and timeSlotId
     const routeId = order_data.routeId;
@@ -55,6 +56,7 @@ router.post("/order/create", async (req, res) => {
 
     res.json({ message: "Order created successfully" });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: "Failed to create an order" });
   }
 });

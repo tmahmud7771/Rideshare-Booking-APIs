@@ -16,12 +16,16 @@ router.post("/create-route", async (req, res) => {
 
     const nextRoutesNumber = latestRoute ? latestRoute.routesNumber + 1 : 1;
 
+    console.log("latestRoute", latestRoute);
+    console.log("nextRoutesNumber", nextRoutesNumber);
+
     routeData.routesNumber = nextRoutesNumber;
 
     const newRoute = new Route(routeData);
     await newRoute.save();
     res.json({ message: "Route created successfully" });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Failed to create a route" });
   }
 });
